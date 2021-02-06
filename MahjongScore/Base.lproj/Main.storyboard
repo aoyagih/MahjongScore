@@ -258,6 +258,7 @@
                         <outlet property="player3ScoreButton" destination="GlJ-HY-xnn" id="kdB-Ra-Ae7"/>
                         <outlet property="player4NameButton" destination="9xa-Dc-a3q" id="O2l-IZ-GJK"/>
                         <outlet property="player4ScoreButton" destination="B2T-GE-tCg" id="8zO-aZ-bEQ"/>
+                        <outlet property="scoreSumLabel" destination="vzj-8z-va2" id="Uq2-RD-QCn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

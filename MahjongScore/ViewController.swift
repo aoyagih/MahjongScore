@@ -24,6 +24,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
     //点数更新用のUITextField(マイナスボタンをつけるためにグローバル変数にしている。)
     var numberTextField: UITextField?
     
+    //4人のプレイヤー点数の和のUILabel(合計100,000点なら正しい)
+    @IBOutlet weak var scoreSumLabel: UILabel!
+    
     //プレイヤー名のUIButtonを押すと、UITextField付きのDialogが出てきて名前を変更できる
     @IBAction func updatePlayer1Name(_ sender: Any) {
         showUpdateNameDialog(index: 0, button: player1NameButton)
@@ -59,7 +62,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         //UserDefaultsに保存されていたプレイヤー名、点数をロードする
         loadPlayerName()
         loadPlayerScore()
-        
+        updateScoreSum()
     }
     
     //UserDefaultsに保存されていたプレイヤー名をロードする
@@ -85,6 +88,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
         UserDefaults.standard.set(playerScore, forKey: key)
     }
 
+    //4人のプレイヤー点数の和を計算し、表示する
+    func updateScoreSum(){
+        let key = "playerScore"   //UserDefaultsのkey
+        let playerScore = UserDefaults.standard.array(forKey: key) as? [Int] ?? [25000, 25000, 25000, 25000]
+        let sum = playerScore[0] + playerScore[1] + playerScore[2] + playerScore[3]
+        scoreSumLabel.text = String(sum)
+    }
     
     //プレイヤー名の変更ダイアログについて
     func showUpdateNameDialog(index: Int, button: UIButton) {
@@ -191,6 +201,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 handler: {
                     (action:UIAlertAction!) -> Void in
                         button.setTitle(String(playerData?[index] ?? -1), for: .normal)
+                    self.updateScoreSum()
                 }
             )
         )
@@ -209,6 +220,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
                     UserDefaults.standard.set(playerData, forKey: key)
                     let value = UserDefaults.standard.array(forKey: key) as? [Int]
                     print(value ?? "")  //更新後のデータ配列
+                    self.updateScoreSum()
                 }
             }
         )
