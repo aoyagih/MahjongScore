@@ -160,24 +160,36 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="player1"/>
+                                <connections>
+                                    <action selector="showPlayer1ScoreDif:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xMc-9N-j9y"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DYX-8P-r7C">
                                 <rect key="frame" x="109" y="482" width="57" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="player2"/>
+                                <connections>
+                                    <action selector="showPlayer2ScoreDif:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YOe-Zc-BoI"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EtD-2Y-7tf">
                                 <rect key="frame" x="197" y="482" width="57" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="player3"/>
+                                <connections>
+                                    <action selector="showPlayer3ScoreDif:" destination="BYZ-38-t0r" eventType="touchUpInside" id="82C-vf-k3E"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yBw-Nz-0e5">
                                 <rect key="frame" x="285" y="482" width="57" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="player4"/>
+                                <connections>
+                                    <action selector="showPlayer4ScoreDif:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VNx-Ue-P87"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="点数移動" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ss1-tu-YAF">
                                 <rect key="frame" x="23" y="526" width="74" height="22"/>
@@ -250,12 +262,16 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="player1DifButton" destination="GPC-cj-Zv9" id="1j7-KI-yUl"/>
                         <outlet property="player1NameButton" destination="OYr-VJ-6La" id="E6x-Wy-13w"/>
                         <outlet property="player1ScoreButton" destination="R1T-eM-gDZ" id="NQa-pe-Gov"/>
+                        <outlet property="player2DifButton" destination="DYX-8P-r7C" id="K4Q-sj-LJl"/>
                         <outlet property="player2NameButton" destination="XB2-gD-a1j" id="WWf-XH-ba6"/>
                         <outlet property="player2ScoreButton" destination="Ngj-Ln-r4N" id="xDk-7C-2xP"/>
+                        <outlet property="player3DifButton" destination="EtD-2Y-7tf" id="8cm-c2-8h2"/>
                         <outlet property="player3NameButton" destination="2g5-je-glE" id="Zb6-mi-rZL"/>
                         <outlet property="player3ScoreButton" destination="GlJ-HY-xnn" id="kdB-Ra-Ae7"/>
+                        <outlet property="player4DifButton" destination="yBw-Nz-0e5" id="9gb-85-0Jo"/>
                         <outlet property="player4NameButton" destination="9xa-Dc-a3q" id="O2l-IZ-GJK"/>
                         <outlet property="player4ScoreButton" destination="B2T-GE-tCg" id="8zO-aZ-bEQ"/>
                         <outlet property="scoreSumLabel" destination="vzj-8z-va2" id="Uq2-RD-QCn"/>

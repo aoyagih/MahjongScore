@@ -9,6 +9,7 @@ import UIKit
 
 class ViewController: UIViewController, UITextFieldDelegate {
     
+    /* プレイヤー名・点数 */
     //プレイヤー名のUIButtonのOutlet
     @IBOutlet weak var player1NameButton: UIButton!
     @IBOutlet weak var player2NameButton: UIButton!
@@ -29,16 +30,16 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     //プレイヤー名のUIButtonを押すと、UITextField付きのDialogが出てきて名前を変更できる
     @IBAction func updatePlayer1Name(_ sender: Any) {
-        showUpdateNameDialog(index: 0, button: player1NameButton)
+        showUpdateNameDialog(index: 0, button: player1NameButton, difButton: player1DifButton)
     }
     @IBAction func updatePlayer2Name(_ sender: Any) {
-        showUpdateNameDialog(index: 1, button: player2NameButton)
+        showUpdateNameDialog(index: 1, button: player2NameButton, difButton: player2DifButton)
     }
     @IBAction func updatePlayer3Name(_ sender: Any) {
-        showUpdateNameDialog(index: 2, button: player3NameButton)
+        showUpdateNameDialog(index: 2, button: player3NameButton, difButton: player3DifButton)
     }
     @IBAction func updatePlayer4Name(_ sender: Any) {
-        showUpdateNameDialog(index: 3, button: player4NameButton)
+        showUpdateNameDialog(index: 3, button: player4NameButton, difButton: player4DifButton)
     }
     //プレイヤー点数のUIButtonを押すと、UITextField付きのDialogが出てきて点数を変更できる
     @IBAction func updatePlayer1Score(_ sender: Any) {
@@ -54,7 +55,30 @@ class ViewController: UIViewController, UITextFieldDelegate {
         showUpdateScoreDialog(index: 3, button: player4ScoreButton)
     }
     
+    /* 機能 */
+    //プレイヤー点差表示のUIButtonのOutlet
+    @IBOutlet weak var player1DifButton: UIButton!
+    @IBOutlet weak var player2DifButton: UIButton!
+    @IBOutlet weak var player3DifButton: UIButton!
+    @IBOutlet weak var player4DifButton: UIButton!
+    //プレイヤー点差表示のUIButtonを押すと、Dialogが出てきて点差を確認できる
+    @IBAction func showPlayer1ScoreDif(_ sender: Any) {
+        showScoreDifDialog(index: 0)
+    }
+    @IBAction func showPlayer2ScoreDif(_ sender: Any) {
+        showScoreDifDialog(index: 1)
+    }
+    @IBAction func showPlayer3ScoreDif(_ sender: Any) {
+        showScoreDifDialog(index: 2)
+    }
+    @IBAction func showPlayer4ScoreDif(_ sender: Any) {
+        showScoreDifDialog(index: 3)
+    }
     
+    
+    
+    
+    /* viewDidLoad */
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -73,6 +97,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
         player2NameButton.setTitle(playerName[1], for: .normal)
         player3NameButton.setTitle(playerName[2], for: .normal)
         player4NameButton.setTitle(playerName[3], for: .normal)
+        player1DifButton.setTitle(playerName[0], for: .normal)
+        player2DifButton.setTitle(playerName[1], for: .normal)
+        player3DifButton.setTitle(playerName[2], for: .normal)
+        player4DifButton.setTitle(playerName[3], for: .normal)
         print(playerName)
         UserDefaults.standard.set(playerName, forKey: key)
     }
@@ -96,8 +124,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         scoreSumLabel.text = String(sum)
     }
     
+    /* プレイヤー名・点数 */
     //プレイヤー名の変更ダイアログについて
-    func showUpdateNameDialog(index: Int, button: UIButton) {
+    func showUpdateNameDialog(index: Int, button: UIButton, difButton: UIButton) {
         let key = "playerName"   //UserDefaultsのkey
         var playerData = UserDefaults.standard.stringArray(forKey: key)
 
@@ -137,6 +166,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
                     print(playerData ?? "")  //更新前のデータ配列
                     let old = playerData?[index] ?? ""
                     button.setTitle(text, for: .normal)
+                    difButton.setTitle(text, for: .normal)
                     print("Update Name: \(old)  -> \(text)")
                     playerData?[index] = text
                     UserDefaults.standard.set(playerData, forKey: key)
@@ -232,6 +262,40 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     
+    /* 機能 */
+    //プレイヤーの点数差分の表示について
+    func showScoreDifDialog(index: Int) {
+        let key = "playerScore"   //UserDefaultsのkey
+        let playerScore = UserDefaults.standard.array(forKey: key) as! [Int]
+        let dif0 = makeSignedStringInt(x: playerScore[0] - playerScore[index])
+        let dif1 = makeSignedStringInt(x: playerScore[1] - playerScore[index])
+        let dif2 = makeSignedStringInt(x: playerScore[2] - playerScore[index])
+        let dif3 = makeSignedStringInt(x: playerScore[3] - playerScore[index])
+        let key2 = "playerName"   //UserDefaultsのkey
+        let playerName = UserDefaults.standard.stringArray(forKey: key2)
+        showSimpleAlert(title: "点差確認(\(playerName?[index] ?? ""))",
+                        message: "\(playerName?[0] ?? ""):     \(dif0)\n\(playerName?[1] ?? ""):      \(dif1)\n\(playerName?[2] ?? ""):      \(dif2)\n\(playerName?[3] ?? ""):      \(dif3)")
+    }
+    //整数を符号つき文字列に変換する関数
+    func makeSignedStringInt(x: Int) -> String{
+        if(x > 0){
+            return "+" + String(x)
+        }else if(x == 0){
+            return "±" + String(x)
+        }else{
+            return String(x)
+        }
+    }
+    //TitleとMessageのみのシンプルなAlertを表示する
+    func showSimpleAlert(title: String, message: String)  {
+        let alert:UIAlertController = UIAlertController(title: title,
+                                                        message: message, preferredStyle: .alert)
+        let action:UIAlertAction = UIAlertAction(title: "OK",
+                                                 style: .default,
+                                                 handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 // 数字キーボードのマイナスボタンを拡張
