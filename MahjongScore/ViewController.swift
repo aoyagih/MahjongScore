@@ -76,6 +76,54 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     
+    /* ツモ(親)ボタン */
+    @IBOutlet weak var drawParentTextField: UITextField!
+    var pickerView1: UIPickerView = UIPickerView()
+    let list1: [[String]] = [
+        ["和了者", "player1", "player2", "player3", "player4"],
+        ["翻数","1翻","2翻","3翻","4翻","5翻","6~7翻","8~10翻","11~12翻","役満","W役満"],
+        ["符","20符","25符","30符","40符","50符","60符","70符","80符"]
+    ]
+    // 決定ボタン押下
+    @objc func done1() {
+        drawParentTextField.endEditing(true)
+        let db: ScoreDB = ScoreDB()
+        let winnerNum = pickerView1.selectedRow(inComponent: 0) - 1
+        //1人あたりの支払い
+        let pay = db.table1[pickerView1.selectedRow(inComponent: 1)][pickerView1.selectedRow(inComponent: 2)]
+        let han = list1[1][pickerView1.selectedRow(inComponent: 1)]  //翻数
+        let fu = list1[2][pickerView1.selectedRow(inComponent: 2)]   //符
+        if(winnerNum != -1){
+            if(pay >= 0){
+                //正常な値の場合
+                var scoreChange = [-pay, -pay, -pay, -pay]
+                scoreChange[winnerNum] = pay * 3
+                print(scoreChange)
+                showScoreUpdateCheckDialog(scoreChange: scoreChange)
+                print("和了者:\(list1[0][winnerNum+1]), \(han)\(fu), \(pay)オール")
+            }else{
+                //スコアエラー
+                showSimpleAlert(title: "エラー", message: db.getErrorMessage(errorCode: pay))
+            }
+        }else{
+            //和了者エラー
+            showSimpleAlert(title: "エラー", message: "和了者を選択してください")
+        }
+    }
+    
+    /* ツモ(子)ボタン */
+    @IBOutlet weak var drawChildTextField: UITextField!
+    var pickerView2: UIPickerView = UIPickerView()
+    let list2: [[String]] = [
+        ["和了者", "player1", "player2", "player3", "player4"],
+        ["親被り", "player1", "player2", "player3", "player4"],
+        ["翻数","1翻","2翻","3翻","4翻","満貫","跳満","倍満","三倍満","役満","W役満"],
+        ["符","20符","30符","40符","50符","60符","70符","80符"]]
+    // 決定ボタン押下
+    @objc func done2() {
+        drawChildTextField.endEditing(true)
+        print(list2[0][pickerView2.selectedRow(inComponent: 0)])
+    }
     
     
     /* viewDidLoad */
@@ -87,6 +135,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
         loadPlayerName()
         loadPlayerScore()
         updateScoreSum()
+        
+        setPicker(textField: drawParentTextField, picker: pickerView1) // ツモ(親)ボタン
+        setPicker(textField: drawChildTextField, picker: pickerView2) // ツモ(子)ボタン
+        
     }
     
     //UserDefaultsに保存されていたプレイヤー名をロードする
@@ -123,6 +175,25 @@ class ViewController: UIViewController, UITextFieldDelegate {
         let sum = playerScore[0] + playerScore[1] + playerScore[2] + playerScore[3]
         scoreSumLabel.text = String(sum)
     }
+    
+    //点数移動用のpickerをセット
+    func setPicker(textField: UITextField, picker: UIPickerView) {
+        // ピッカー設定
+        picker.delegate = self
+        picker.dataSource = self
+        // 決定バーの生成
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
+        let spacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        var doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done1))
+        if(picker == pickerView2){
+            doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done2))
+        }
+        toolbar.setItems([spacelItem, doneItem], animated: true)
+        // インプットビュー設定
+        textField.inputView = picker
+        textField.inputAccessoryView = toolbar
+    }
+    
     
     /* プレイヤー名・点数 */
     //プレイヤー名の変更ダイアログについて
@@ -296,6 +367,56 @@ class ViewController: UIViewController, UITextFieldDelegate {
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
     }
+    
+    //プレイヤーの点数更新の確認用ダイアログ
+    func showScoreUpdateCheckDialog(scoreChange: [Int]) {
+        let key1 = "playerName"   //UserDefaultsのkey
+        let playerNames = UserDefaults.standard.stringArray(forKey: key1)
+        let key2 = "playerScore"   //UserDefaultsのkey
+        let oldScores = UserDefaults.standard.array(forKey: key2) as? [Int]
+        var newScores = [0, 0, 0, 0]
+        for i in 0...3{
+            newScores[i] = ((oldScores?[i] ?? 0) + scoreChange[i])
+        }
+        for i in 0...3{
+            print("\(playerNames?[i] ?? ""):  \(newScores[i])(\(makeSignedStringInt(x: scoreChange[i])))")
+        }
+        
+        let alert:UIAlertController = UIAlertController(title: "以下の点数に更新します",
+                                                        message: "\(playerNames?[0] ?? ""):  \(newScores[0])(\(makeSignedStringInt(x: scoreChange[0])))\n\(playerNames?[1] ?? ""):  \(newScores[1])(\(makeSignedStringInt(x: scoreChange[1])))\n\(playerNames?[2] ?? ""):  \(newScores[2])(\(makeSignedStringInt(x: scoreChange[2])))\n\(playerNames?[3] ?? ""):  \(newScores[3])(\(makeSignedStringInt(x: scoreChange[3])))", preferredStyle: .alert)
+        //キャンセル時のハンドラ
+        alert.addAction(
+            UIAlertAction(
+                title: "キャンセル",
+                style: UIAlertAction.Style.cancel,
+                handler: nil
+            )
+        )
+        //決定時のハンドラ
+        alert.addAction(
+            UIAlertAction(
+                title: "決定",
+                style: UIAlertAction.Style.default
+            ) { _ in
+                self.updateScores(newScores: newScores)
+            }
+        )
+        present(alert, animated: true, completion: nil)
+    }
+    
+    //スコア表示の更新
+    func updateScores(newScores: [Int]) {
+        //UserDefaultsの値の更新
+        let key = "playerScore"   //UserDefaultsのkey
+        UserDefaults.standard.set(newScores, forKey: key)
+        //画面上部のスコア表示の更新
+        player1ScoreButton.setTitle(String(newScores[0]), for: .normal)
+        player2ScoreButton.setTitle(String(newScores[1]), for: .normal)
+        player3ScoreButton.setTitle(String(newScores[2]), for: .normal)
+        player4ScoreButton.setTitle(String(newScores[3]), for: .normal)
+        //スコア合計表示の更新
+        updateScoreSum()
+    }
 }
 
 // 数字キーボードのマイナスボタンを拡張
@@ -303,5 +424,55 @@ extension UITextField {
     func toggleMinus() {
         guard let text = self.text, !text.isEmpty else { return }
         self.text = String(text.hasPrefix("-") ? text.dropFirst() : "-\(text)")
+    }
+}
+
+
+extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
+    // ドラムロールの列数
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        if(pickerView == pickerView1){
+            return list1.count
+        }else if(pickerView == pickerView2){
+            return list2.count
+        }
+        return 1
+    }
+    
+    // ドラムロールの行数
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if(pickerView == pickerView1){
+            return list1[component].count
+        }else if(pickerView == pickerView2){
+            return list2[component].count
+        }
+        return 1
+    }
+    
+    // ドラムロールの各タイトル
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if(pickerView == pickerView1){
+            if(component == 0){
+                if(row == 0){
+                    return "和了者"
+                }
+                let key = "playerName"   //UserDefaultsのkey
+                let playerNames = UserDefaults.standard.stringArray(forKey: key)
+                return playerNames?[row-1]
+            }
+            return list1[component][row]
+        }else if(pickerView == pickerView2){
+            if(component == 0 && row == 0){
+                return "和了者"
+            }else if(component == 1 && row == 0){
+                return "親被り"
+            }else if(component == 0 || component == 1){
+                let key = "playerName"   //UserDefaultsのkey
+                let playerNames = UserDefaults.standard.stringArray(forKey: key)
+                return playerNames?[row-1]
+            }
+            return list2[component][row]
+        }
+        return list1[component][row]
     }
 }
