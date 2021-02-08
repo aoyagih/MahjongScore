@@ -117,12 +117,46 @@ class ViewController: UIViewController, UITextFieldDelegate {
     let list2: [[String]] = [
         ["和了者", "player1", "player2", "player3", "player4"],
         ["親被り", "player1", "player2", "player3", "player4"],
-        ["翻数","1翻","2翻","3翻","4翻","満貫","跳満","倍満","三倍満","役満","W役満"],
-        ["符","20符","30符","40符","50符","60符","70符","80符"]]
+        ["翻数","1翻","2翻","3翻","4翻","5翻","6~7翻","8~10翻","11~12翻","役満","W役満"],
+        ["符","20符","25符","30符","40符","50符","60符","70符","80符"]]
     // 決定ボタン押下
     @objc func done2() {
         drawChildTextField.endEditing(true)
-        print(list2[0][pickerView2.selectedRow(inComponent: 0)])
+        let db: ScoreDB = ScoreDB()
+        let winnerNum = pickerView2.selectedRow(inComponent: 0) - 1
+        let parentNum = pickerView2.selectedRow(inComponent: 1) - 1
+        //1人あたりの支払い
+        let pay_child = db.table2[pickerView2.selectedRow(inComponent: 2)][pickerView2.selectedRow(inComponent: 3)]
+        let pay_parent = db.table1[pickerView2.selectedRow(inComponent: 2)][pickerView2.selectedRow(inComponent: 3)]
+        let han = list2[2][pickerView2.selectedRow(inComponent: 2)]  //翻数
+        let fu = list2[3][pickerView2.selectedRow(inComponent: 3)]   //符
+        if(winnerNum != -1){
+            if(parentNum != -1){
+                if(winnerNum != parentNum){
+                    if(pay_child >= 0){
+                        //正常な値の場合
+                        var scoreChange = [-pay_child, -pay_child, -pay_child, -pay_child]
+                        scoreChange[parentNum] = -pay_parent
+                        scoreChange[winnerNum] = pay_child * 2 + pay_parent
+                        print(scoreChange)
+                        showScoreUpdateCheckDialog(scoreChange: scoreChange)
+                        print("和了者:\(list2[0][winnerNum+1]), 親被り:\(list2[0][parentNum+1]), \(han)\(fu), \(pay_child)・\(pay_parent)")
+                    }else{
+                        //スコアエラー
+                        showSimpleAlert(title: "エラー", message: db.getErrorMessage(errorCode: pay_child))
+                    }
+                }else{
+                    //和了者・親被り者一致エラー
+                    showSimpleAlert(title: "エラー", message: "和了者と親被り者が同じです")
+                }
+            }else{
+                //親被りエラー
+                showSimpleAlert(title: "エラー", message: "親を選択してください")
+            }
+        }else{
+            //和了者エラー
+            showSimpleAlert(title: "エラー", message: "和了者を選択してください")
+        }
     }
     
     
