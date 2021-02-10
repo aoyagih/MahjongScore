@@ -159,6 +159,68 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    /* ロンボタン */
+    @IBOutlet weak var ronTextField: UITextField!
+    var pickerView3: UIPickerView = UIPickerView()
+    let list3: [[String]] = [
+        ["和了者", "player1", "player2", "player3", "player4"],
+        ["放銃者", "player1", "player2", "player3", "player4"],
+        ["親or子", "親", "子"],
+        ["翻数","1翻","2翻","3翻","4翻","5翻","6~7翻","8~10翻","11~12翻","役満","W役満"],
+        ["符","20符","25符","30符","40符","50符","60符","70符","80符"]]
+    // 決定ボタン押下
+    @objc func done3() {
+        ronTextField.endEditing(true)
+        let db: ScoreDB = ScoreDB()
+        let winnerNum = pickerView3.selectedRow(inComponent: 0) - 1
+        let loserNum = pickerView3.selectedRow(inComponent: 1) - 1
+        let parentChildNum = pickerView3.selectedRow(inComponent: 2) - 1
+        let parentChild = list3[2][pickerView3.selectedRow(inComponent: 2)]  //親or子
+        let han = list3[3][pickerView3.selectedRow(inComponent: 3)]  //翻数
+        let fu = list3[4][pickerView3.selectedRow(inComponent: 4)]   //符
+        if(winnerNum != -1){
+            if(loserNum != -1){
+                if(winnerNum != loserNum){
+                    if(parentChildNum != -1){
+                        let pay: Int
+                        if(parentChildNum == 0){
+                            //親のロン
+                            pay = db.table3[pickerView3.selectedRow(inComponent: 3)][pickerView3.selectedRow(inComponent: 4)]
+                        }else{
+                            //子のロン
+                            pay = db.table4[pickerView3.selectedRow(inComponent: 3)][pickerView3.selectedRow(inComponent: 4)]
+                        }
+                        if(pay >= 0){
+                            //正常な値の場合
+                            var scoreChange = [0, 0, 0, 0]
+                            scoreChange[loserNum] = -pay
+                            scoreChange[winnerNum] = pay
+                            print(scoreChange)
+                            showScoreUpdateCheckDialog(scoreChange: scoreChange)
+                            print("和了者:\(list3[0][winnerNum+1]) <- 放銃者:\(list3[0][loserNum+1]), \(han)\(fu)(\(parentChild)), \(pay)")
+                        }else{
+                            //スコアエラー
+                            showSimpleAlert(title: "エラー", message: db.getErrorMessage(errorCode: pay))
+                        }
+                    }else{
+                        //親・子エラー
+                        showSimpleAlert(title: "エラー", message: "親か子を選択してください")
+                    }
+                    
+                }else{
+                    //和了者・放銃者一致エラー
+                    showSimpleAlert(title: "エラー", message: "和了者と放銃者が同じです")
+                }
+            }else{
+                //放銃者エラー
+                showSimpleAlert(title: "エラー", message: "放銃者を選択してください")
+            }
+        }else{
+            //和了者エラー
+            showSimpleAlert(title: "エラー", message: "和了者を選択してください")
+        }
+    }
+    
     
     /* viewDidLoad */
     override func viewDidLoad() {
@@ -172,7 +234,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
         setPicker(textField: drawParentTextField, picker: pickerView1) // ツモ(親)ボタン
         setPicker(textField: drawChildTextField, picker: pickerView2) // ツモ(子)ボタン
-        
+        setPicker(textField: ronTextField, picker: pickerView3)       //ロンボタン
     }
     
     //UserDefaultsに保存されていたプレイヤー名をロードする
@@ -221,6 +283,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         var doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done1))
         if(picker == pickerView2){
             doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done2))
+        }else if(picker == pickerView3){
+            doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done3))
         }
         toolbar.setItems([spacelItem, doneItem], animated: true)
         // インプットビュー設定
@@ -469,6 +533,8 @@ extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
             return list1.count
         }else if(pickerView == pickerView2){
             return list2.count
+        }else if(pickerView == pickerView3){
+            return list3.count
         }
         return 1
     }
@@ -479,6 +545,8 @@ extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
             return list1[component].count
         }else if(pickerView == pickerView2){
             return list2[component].count
+        }else if(pickerView == pickerView3){
+            return list3[component].count
         }
         return 1
     }
@@ -506,7 +574,18 @@ extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
                 return playerNames?[row-1]
             }
             return list2[component][row]
+        }else if(pickerView == pickerView3){
+            if(component == 0 && row == 0){
+                return "和了者"
+            }else if(component == 1 && row == 0){
+                return "放銃者"
+            }else if(component == 0 || component == 1){
+                let key = "playerName"   //UserDefaultsのkey
+                let playerNames = UserDefaults.standard.stringArray(forKey: key)
+                return playerNames?[row-1]
+            }
+            return list3[component][row]
         }
-        return list1[component][row]
+        return list3[component][row]
     }
 }

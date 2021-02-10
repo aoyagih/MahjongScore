@@ -199,14 +199,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cPj-XQ-paJ">
-                                <rect key="frame" x="228" y="551" width="35" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="ロン"/>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ls-tQ-EJY">
-                                <rect key="frame" x="285" y="552" width="52" height="33"/>
+                                <rect key="frame" x="291" y="552" width="52" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="供託棒"/>
@@ -256,6 +250,13 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="ロン" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PX1-zu-Iev">
+                                <rect key="frame" x="191" y="552" width="78" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="textColor" name="AccentColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -279,6 +280,7 @@
                         <outlet property="player4DifButton" destination="yBw-Nz-0e5" id="9gb-85-0Jo"/>
                         <outlet property="player4NameButton" destination="9xa-Dc-a3q" id="O2l-IZ-GJK"/>
                         <outlet property="player4ScoreButton" destination="B2T-GE-tCg" id="8zO-aZ-bEQ"/>
+                        <outlet property="ronTextField" destination="PX1-zu-Iev" id="a5l-Q3-Dem"/>
                         <outlet property="scoreSumLabel" destination="vzj-8z-va2" id="Uq2-RD-QCn"/>
                     </connections>
                 </viewController>
