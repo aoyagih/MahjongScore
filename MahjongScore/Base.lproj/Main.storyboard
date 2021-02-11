@@ -217,18 +217,27 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="5-10"/>
+                                <connections>
+                                    <action selector="uma5_10:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qd8-OF-xdx"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b5W-3a-7NQ">
                                 <rect key="frame" x="96" y="621" width="38" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="5-15"/>
+                                <connections>
+                                    <action selector="uma5_15:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kTh-Tt-ME2"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T6E-XQ-vIj">
                                 <rect key="frame" x="164" y="620" width="49" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="10-20"/>
+                                <connections>
+                                    <action selector="uma10_20:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WRm-YM-bPd"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BDi-vp-Mn3">
                                 <rect key="frame" x="247" y="621" width="87" height="33"/>

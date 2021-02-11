@@ -221,6 +221,16 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    //ウマ精算のUIButtonを押すと、Dialogが出てきて結果を確認できる
+    @IBAction func uma5_10(_ sender: Any) {
+        showResultScore(x1: 5, x2: 10)
+    }
+    @IBAction func uma5_15(_ sender: Any) {
+        showResultScore(x1: 5, x2: 15)
+    }
+    @IBAction func uma10_20(_ sender: Any) {
+        showResultScore(x1: 10, x2: 20)
+    }
     
     /* viewDidLoad */
     override func viewDidLoad() {
@@ -514,6 +524,39 @@ class ViewController: UIViewController, UITextFieldDelegate {
         player4ScoreButton.setTitle(String(newScores[3]), for: .normal)
         //スコア合計表示の更新
         updateScoreSum()
+    }
+    
+    //ウマを精算して結果を確認できる
+    func showResultScore(x1: Int, x2: Int){
+        let key1 = "playerName"   //UserDefaultsのkey
+        let playerNames = UserDefaults.standard.stringArray(forKey: key1)
+        let key2 = "playerScore"   //UserDefaultsのkey
+        let oldScores = UserDefaults.standard.array(forKey: key2) as? [Int]
+        var oldDict = [String: Int]()
+        for i in 0...3{
+            oldDict[playerNames?[i] ?? ""] = (oldScores?[i] ?? -1)
+        }
+        
+        var dict = [String: Int]()
+        for i in 0...3{
+            dict[playerNames?[i] ?? ""] = ((oldScores?[i] ?? -1) - 25000)
+        }
+        let sortedDict = dict.sorted{ $0.value > $1.value }   //Todo:安定ソートでない
+        let uma = [x2, x1, -x1, -x2]
+        print(uma)
+        var i = 0
+        var resultName = [String]()
+        var resultScore = [Double]()
+        sortedDict.forEach{(k,v) -> Void in
+            resultName.append(k)
+            resultScore.append(Double(v)/1000.0 + Double(uma[i]))
+            i+=1
+        }
+        for i in 0...3{
+            print("\(resultName[i]): \(oldDict[resultName[i]] ?? -1)(\(resultScore[i]))")
+        }
+        showSimpleAlert(title: "最終スコア(\(x1)-\(x2))",
+                        message: "1位 \(resultName[0]): \(oldDict[resultName[0]] ?? -1)(\(resultScore[0]))\n2位 \(resultName[1]): \(oldDict[resultName[1]] ?? -1)(\(resultScore[1]))\n3位 \(resultName[2]): \(oldDict[resultName[2]] ?? -1)(\(resultScore[2]))\n4位 \(resultName[3]): \(oldDict[resultName[3]] ?? -1)(\(resultScore[3]))")
     }
 }
 
