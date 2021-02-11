@@ -249,8 +249,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     //UserDefaultsに保存されていたプレイヤー名をロードする
     func loadPlayerName(){
-        let key = "playerName"   //UserDefaultsのkey
-        let playerName = UserDefaults.standard.stringArray(forKey: key) ?? ["player1", "player2", "player3", "player4"]
+        let playerName = getPlayerNames()
         player1NameButton.setTitle(playerName[0], for: .normal)
         player2NameButton.setTitle(playerName[1], for: .normal)
         player3NameButton.setTitle(playerName[2], for: .normal)
@@ -260,7 +259,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         player3DifButton.setTitle(playerName[2], for: .normal)
         player4DifButton.setTitle(playerName[3], for: .normal)
         print(playerName)
-        UserDefaults.standard.set(playerName, forKey: key)
+        setPlayerNames(names: playerName)
     }
     
     //UserDefaultsに保存されていたプレイヤー点数をロードする
@@ -270,7 +269,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         player2ScoreButton.setTitle(String(playerScore[1]), for: .normal)
         player3ScoreButton.setTitle(String(playerScore[2]), for: .normal)
         player4ScoreButton.setTitle(String(playerScore[3]), for: .normal)
-        UserDefaults.standard.set(playerScore, forKey: "playerScore")
+        setPlayerScores(scores: playerScore)
     }
 
     //4人のプレイヤー点数の和を計算し、表示する
@@ -345,10 +344,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
                     difButton.setTitle(text, for: .normal)
                     print("Update Name: \(old)  -> \(text)")
                     playerData[index] = text
-                    let key = "playerName"   //UserDefaultsのkey
-                    UserDefaults.standard.set(playerData, forKey: key)
-                    let newArray = UserDefaults.standard.stringArray(forKey: key)
-                    print(newArray ?? "")  //更新後のデータ配列
+                    self.setPlayerNames(names: playerData)
+                    print(self.getPlayerNames())  //更新後のデータ配列
                 }
             }
         )
@@ -422,8 +419,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
                     playerData[index] = Int(text) ?? -1
                     button.setTitle(String(playerData[index]), for: .normal)
                     print("Update Score: \(old)  -> \(playerData[index])")
-                    let key = "playerScore"   //UserDefaultsのkey
-                    UserDefaults.standard.set(playerData, forKey: key)
+                    self.setPlayerScores(scores: playerData)
                     let value = self.getPlayerScores()
                     print(value)  //更新後のデータ配列
                     self.updateScoreSum()
@@ -508,8 +504,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     //スコア表示の更新
     func updateScores(newScores: [Int]) {
         //UserDefaultsの値の更新
-        let key = "playerScore"   //UserDefaultsのkey
-        UserDefaults.standard.set(newScores, forKey: key)
+        setPlayerScores(scores: newScores)
         //画面上部のスコア表示の更新
         player1ScoreButton.setTitle(String(newScores[0]), for: .normal)
         player2ScoreButton.setTitle(String(newScores[1]), for: .normal)
@@ -552,11 +547,19 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     //UserDefaultsからプレイヤーの名前配列を取得する関数
     func getPlayerNames() -> [String]{
-        return  UserDefaults.standard.stringArray(forKey: "playerName") ?? [""]
+        return  UserDefaults.standard.stringArray(forKey: "playerName") ?? ["player1", "player2", "player3", "player4"]
     }
     //UserDefaultsからプレイヤーのスコア配列を取得する関数
     func getPlayerScores() -> [Int]{
         return  UserDefaults.standard.array(forKey: "playerScore") as? [Int] ?? [25000, 25000, 25000, 25000]
+    }
+    //UserDefaultsにプレイヤーの名前配列をセットする関数
+    func setPlayerNames(names: [String]){
+        UserDefaults.standard.set(names, forKey: "playerName")
+    }
+    //UserDefaultsにプレイヤーのスコア配列をセットする関数
+    func setPlayerScores(scores: [Int]){
+        UserDefaults.standard.set(scores, forKey: "playerScore")
     }
 }
 
