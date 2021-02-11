@@ -306,8 +306,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     /* プレイヤー名・点数 */
     //プレイヤー名の変更ダイアログについて
     func showUpdateNameDialog(index: Int, button: UIButton, difButton: UIButton) {
-        let key = "playerName"   //UserDefaultsのkey
-        var playerData = UserDefaults.standard.stringArray(forKey: key)
+        var playerData = getPlayerNames()
 
         var alertTextField: UITextField?
         //タイトルの表示
@@ -320,7 +319,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         alert.addTextField(
             configurationHandler: {(textField: UITextField!) in
                 alertTextField = textField
-                textField.text = playerData?[index]
+                textField.text = playerData[index]
                 button.setTitle(textField.text, for: .normal)
             }
         )
@@ -331,7 +330,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 style: UIAlertAction.Style.cancel,
                 handler: {
                     (action:UIAlertAction!) -> Void in
-                        button.setTitle(playerData?[index], for: .normal)
+                    button.setTitle(playerData[index], for: .normal)
                 }
             )
         )
@@ -342,12 +341,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 style: UIAlertAction.Style.default
             ) { _ in
                 if let text = alertTextField?.text {
-                    print(playerData ?? "")  //更新前のデータ配列
-                    let old = playerData?[index] ?? ""
+                    print(playerData)  //更新前のデータ配列
+                    let old = playerData[index]
                     button.setTitle(text, for: .normal)
                     difButton.setTitle(text, for: .normal)
                     print("Update Name: \(old)  -> \(text)")
-                    playerData?[index] = text
+                    playerData[index] = text
+                    let key = "playerName"   //UserDefaultsのkey
                     UserDefaults.standard.set(playerData, forKey: key)
                     let newArray = UserDefaults.standard.stringArray(forKey: key)
                     print(newArray ?? "")  //更新後のデータ配列
@@ -450,10 +450,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         let dif1 = makeSignedStringInt(x: playerScore[1] - playerScore[index])
         let dif2 = makeSignedStringInt(x: playerScore[2] - playerScore[index])
         let dif3 = makeSignedStringInt(x: playerScore[3] - playerScore[index])
-        let key2 = "playerName"   //UserDefaultsのkey
-        let playerName = UserDefaults.standard.stringArray(forKey: key2)
-        showSimpleAlert(title: "点差確認(\(playerName?[index] ?? ""))",
-                        message: "\(playerName?[0] ?? ""):     \(dif0)\n\(playerName?[1] ?? ""):      \(dif1)\n\(playerName?[2] ?? ""):      \(dif2)\n\(playerName?[3] ?? ""):      \(dif3)")
+        let playerName = getPlayerNames()
+        showSimpleAlert(title: "点差確認(\(playerName[index]))",
+                        message: "\(playerName[0]):     \(dif0)\n\(playerName[1]):      \(dif1)\n\(playerName[2]):      \(dif2)\n\(playerName[3]):      \(dif3)")
     }
     //整数を符号つき文字列に変換する関数
     func makeSignedStringInt(x: Int) -> String{
@@ -478,8 +477,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     //プレイヤーの点数更新の確認用ダイアログ
     func showScoreUpdateCheckDialog(scoreChange: [Int]) {
-        let key1 = "playerName"   //UserDefaultsのkey
-        let playerNames = UserDefaults.standard.stringArray(forKey: key1)
+        let playerNames = getPlayerNames()
         let key2 = "playerScore"   //UserDefaultsのkey
         let oldScores = UserDefaults.standard.array(forKey: key2) as? [Int]
         var newScores = [0, 0, 0, 0]
@@ -487,11 +485,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
             newScores[i] = ((oldScores?[i] ?? 0) + scoreChange[i])
         }
         for i in 0...3{
-            print("\(playerNames?[i] ?? ""):  \(newScores[i])(\(makeSignedStringInt(x: scoreChange[i])))")
+            print("\(playerNames[i]):  \(newScores[i])(\(makeSignedStringInt(x: scoreChange[i])))")
         }
         
         let alert:UIAlertController = UIAlertController(title: "以下の点数に更新します",
-                                                        message: "\(playerNames?[0] ?? ""):  \(newScores[0])(\(makeSignedStringInt(x: scoreChange[0])))\n\(playerNames?[1] ?? ""):  \(newScores[1])(\(makeSignedStringInt(x: scoreChange[1])))\n\(playerNames?[2] ?? ""):  \(newScores[2])(\(makeSignedStringInt(x: scoreChange[2])))\n\(playerNames?[3] ?? ""):  \(newScores[3])(\(makeSignedStringInt(x: scoreChange[3])))", preferredStyle: .alert)
+                                                        message: "\(playerNames[0]):  \(newScores[0])(\(makeSignedStringInt(x: scoreChange[0])))\n\(playerNames[1]):  \(newScores[1])(\(makeSignedStringInt(x: scoreChange[1])))\n\(playerNames[2]):  \(newScores[2])(\(makeSignedStringInt(x: scoreChange[2])))\n\(playerNames[3]):  \(newScores[3])(\(makeSignedStringInt(x: scoreChange[3])))", preferredStyle: .alert)
         //キャンセル時のハンドラ
         alert.addAction(
             UIAlertAction(
@@ -528,18 +526,17 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     //ウマを精算して結果を確認できる
     func showResultScore(x1: Int, x2: Int){
-        let key1 = "playerName"   //UserDefaultsのkey
-        let playerNames = UserDefaults.standard.stringArray(forKey: key1)
+        let playerNames = getPlayerNames()
         let key2 = "playerScore"   //UserDefaultsのkey
         let oldScores = UserDefaults.standard.array(forKey: key2) as? [Int]
         var oldDict = [String: Int]()
         for i in 0...3{
-            oldDict[playerNames?[i] ?? ""] = (oldScores?[i] ?? -1)
+            oldDict[playerNames[i]] = (oldScores?[i] ?? -1)
         }
         
         var dict = [String: Int]()
         for i in 0...3{
-            dict[playerNames?[i] ?? ""] = ((oldScores?[i] ?? -1) - 25000)
+            dict[playerNames[i]] = ((oldScores?[i] ?? -1) - 25000)
         }
         let sortedDict = dict.sorted{ $0.value > $1.value }   //Todo:安定ソートでない
         let uma = [x2, x1, -x1, -x2]
@@ -557,6 +554,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
         showSimpleAlert(title: "最終スコア(\(x1)-\(x2))",
                         message: "1位 \(resultName[0]): \(oldDict[resultName[0]] ?? -1)(\(resultScore[0]))\n2位 \(resultName[1]): \(oldDict[resultName[1]] ?? -1)(\(resultScore[1]))\n3位 \(resultName[2]): \(oldDict[resultName[2]] ?? -1)(\(resultScore[2]))\n4位 \(resultName[3]): \(oldDict[resultName[3]] ?? -1)(\(resultScore[3]))")
+    }
+    
+    //UserDefaultsからプレイヤーの名前配列を取得する関数
+    func getPlayerNames() -> [String]{
+        return  UserDefaults.standard.stringArray(forKey: "playerName") ?? [""]
     }
 }
 
@@ -601,9 +603,7 @@ extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
                 if(row == 0){
                     return "和了者"
                 }
-                let key = "playerName"   //UserDefaultsのkey
-                let playerNames = UserDefaults.standard.stringArray(forKey: key)
-                return playerNames?[row-1]
+                return getPlayerNames()[row-1]
             }
             return list1[component][row]
         }else if(pickerView == pickerView2){
@@ -612,9 +612,7 @@ extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
             }else if(component == 1 && row == 0){
                 return "親被り"
             }else if(component == 0 || component == 1){
-                let key = "playerName"   //UserDefaultsのkey
-                let playerNames = UserDefaults.standard.stringArray(forKey: key)
-                return playerNames?[row-1]
+                return getPlayerNames()[row-1]
             }
             return list2[component][row]
         }else if(pickerView == pickerView3){
@@ -623,9 +621,7 @@ extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
             }else if(component == 1 && row == 0){
                 return "放銃者"
             }else if(component == 0 || component == 1){
-                let key = "playerName"   //UserDefaultsのkey
-                let playerNames = UserDefaults.standard.stringArray(forKey: key)
-                return playerNames?[row-1]
+                return getPlayerNames()[row-1]
             }
             return list3[component][row]
         }
