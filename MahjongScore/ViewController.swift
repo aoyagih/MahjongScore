@@ -265,19 +265,17 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     //UserDefaultsに保存されていたプレイヤー点数をロードする
     func loadPlayerScore(){
-        let key = "playerScore"   //UserDefaultsのkey
-        let playerScore = UserDefaults.standard.array(forKey: key) as? [Int] ?? [25000, 25000, 25000, 25000]
+        let playerScore = getPlayerScores()
         player1ScoreButton.setTitle(String(playerScore[0]), for: .normal)
         player2ScoreButton.setTitle(String(playerScore[1]), for: .normal)
         player3ScoreButton.setTitle(String(playerScore[2]), for: .normal)
         player4ScoreButton.setTitle(String(playerScore[3]), for: .normal)
-        UserDefaults.standard.set(playerScore, forKey: key)
+        UserDefaults.standard.set(playerScore, forKey: "playerScore")
     }
 
     //4人のプレイヤー点数の和を計算し、表示する
     func updateScoreSum(){
-        let key = "playerScore"   //UserDefaultsのkey
-        let playerScore = UserDefaults.standard.array(forKey: key) as? [Int] ?? [25000, 25000, 25000, 25000]
+        let playerScore = getPlayerScores()
         let sum = playerScore[0] + playerScore[1] + playerScore[2] + playerScore[3]
         scoreSumLabel.text = String(sum)
     }
@@ -360,9 +358,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     //プレイヤーの点数の変更について
     func showUpdateScoreDialog(index: Int, button: UIButton) {
-        let key = "playerScore"   //UserDefaultsのkey
-        var playerData = UserDefaults.standard.array(forKey: key) as? [Int]
-
+        var playerData = getPlayerScores()
         //タイトルの表示
         let alert = UIAlertController(
             title: "\(index+1)人目の点数を入力",
@@ -373,7 +369,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         alert.addTextField(
             configurationHandler: {(textField: UITextField!) in
                 self.numberTextField = textField
-                textField.text = String(playerData?[index] ?? -1)
+                textField.text = String(playerData[index])
                 textField.keyboardType = .numberPad   //数字のみのキーボードに変更
                 
                 // トビ用にマイナスボタンをつける
@@ -409,7 +405,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 style: UIAlertAction.Style.cancel,
                 handler: {
                     (action:UIAlertAction!) -> Void in
-                        button.setTitle(String(playerData?[index] ?? -1), for: .normal)
+                        button.setTitle(String(playerData[index]), for: .normal)
                     self.updateScoreSum()
                 }
             )
@@ -421,14 +417,15 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 style: UIAlertAction.Style.default
             ) { _ in
                 if let text = self.numberTextField?.text {
-                    print(playerData ?? "")  //更新前のデータ配列
-                    let old = playerData?[index] ?? -1
-                    playerData?[index] = Int(text) ?? -1
-                    button.setTitle(String(playerData?[index] ?? -1), for: .normal)
-                    print("Update Score: \(old)  -> \(playerData?[index] ?? -1)")
+                    print(playerData)  //更新前のデータ配列
+                    let old = playerData[index]
+                    playerData[index] = Int(text) ?? -1
+                    button.setTitle(String(playerData[index]), for: .normal)
+                    print("Update Score: \(old)  -> \(playerData[index])")
+                    let key = "playerScore"   //UserDefaultsのkey
                     UserDefaults.standard.set(playerData, forKey: key)
-                    let value = UserDefaults.standard.array(forKey: key) as? [Int]
-                    print(value ?? "")  //更新後のデータ配列
+                    let value = self.getPlayerScores()
+                    print(value)  //更新後のデータ配列
                     self.updateScoreSum()
                 }
             }
@@ -444,8 +441,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     /* 機能 */
     //プレイヤーの点数差分の表示について
     func showScoreDifDialog(index: Int) {
-        let key = "playerScore"   //UserDefaultsのkey
-        let playerScore = UserDefaults.standard.array(forKey: key) as! [Int]
+        let playerScore = getPlayerScores()
         let dif0 = makeSignedStringInt(x: playerScore[0] - playerScore[index])
         let dif1 = makeSignedStringInt(x: playerScore[1] - playerScore[index])
         let dif2 = makeSignedStringInt(x: playerScore[2] - playerScore[index])
@@ -478,11 +474,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
     //プレイヤーの点数更新の確認用ダイアログ
     func showScoreUpdateCheckDialog(scoreChange: [Int]) {
         let playerNames = getPlayerNames()
-        let key2 = "playerScore"   //UserDefaultsのkey
-        let oldScores = UserDefaults.standard.array(forKey: key2) as? [Int]
+        let oldScores = getPlayerScores()
         var newScores = [0, 0, 0, 0]
         for i in 0...3{
-            newScores[i] = ((oldScores?[i] ?? 0) + scoreChange[i])
+            newScores[i] = (oldScores[i] + scoreChange[i])
         }
         for i in 0...3{
             print("\(playerNames[i]):  \(newScores[i])(\(makeSignedStringInt(x: scoreChange[i])))")
@@ -527,16 +522,15 @@ class ViewController: UIViewController, UITextFieldDelegate {
     //ウマを精算して結果を確認できる
     func showResultScore(x1: Int, x2: Int){
         let playerNames = getPlayerNames()
-        let key2 = "playerScore"   //UserDefaultsのkey
-        let oldScores = UserDefaults.standard.array(forKey: key2) as? [Int]
+        let oldScores = getPlayerScores()
         var oldDict = [String: Int]()
         for i in 0...3{
-            oldDict[playerNames[i]] = (oldScores?[i] ?? -1)
+            oldDict[playerNames[i]] = oldScores[i]
         }
         
         var dict = [String: Int]()
         for i in 0...3{
-            dict[playerNames[i]] = ((oldScores?[i] ?? -1) - 25000)
+            dict[playerNames[i]] = (oldScores[i] - 25000)
         }
         let sortedDict = dict.sorted{ $0.value > $1.value }   //Todo:安定ソートでない
         let uma = [x2, x1, -x1, -x2]
@@ -559,6 +553,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
     //UserDefaultsからプレイヤーの名前配列を取得する関数
     func getPlayerNames() -> [String]{
         return  UserDefaults.standard.stringArray(forKey: "playerName") ?? [""]
+    }
+    //UserDefaultsからプレイヤーのスコア配列を取得する関数
+    func getPlayerScores() -> [Int]{
+        return  UserDefaults.standard.array(forKey: "playerScore") as? [Int] ?? [25000, 25000, 25000, 25000]
     }
 }
 
