@@ -244,6 +244,9 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="点数初期化"/>
+                                <connections>
+                                    <action selector="initScore:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qaH-e1-3x8"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="ツモ(親)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="e5F-NC-Ke2">
                                 <rect key="frame" x="19" y="552" width="78" height="34"/>

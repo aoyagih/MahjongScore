@@ -231,6 +231,31 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBAction func uma10_20(_ sender: Any) {
         showResultScore(x1: 10, x2: 20)
     }
+    //点数初期化ボタン
+    @IBAction func initScore(_ sender: Any) {
+        let newScores = [25000, 25000, 25000, 25000]
+        let alert:UIAlertController = UIAlertController(title: "確認",
+                                                        message: "全員の点数を初期化しますか？\n(この操作は元に戻せません)", preferredStyle: .alert)
+        //キャンセル時のハンドラ
+        alert.addAction(
+            UIAlertAction(
+                title: "キャンセル",
+                style: UIAlertAction.Style.cancel,
+                handler: nil
+            )
+        )
+        //決定時のハンドラ
+        alert.addAction(
+            UIAlertAction(
+                title: "決定",
+                style: UIAlertAction.Style.default
+            ) { _ in
+                self.updateScores(newScores: newScores)
+            }
+        )
+        present(alert, animated: true, completion: nil)
+    }
+    
     
     /* viewDidLoad */
     override func viewDidLoad() {
