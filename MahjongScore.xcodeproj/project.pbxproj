@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D14D10FC25D6113200DA1F5E /* SanmaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14D10FB25D6113200DA1F5E /* SanmaViewController.swift */; };
+		D14D110125D6158F00DA1F5E /* SanmaScoreDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14D110025D6158F00DA1F5E /* SanmaScoreDB.swift */; };
 		D170DCF625D0D9210064B9F9 /* ScoreDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = D170DCF525D0D9210064B9F9 /* ScoreDB.swift */; };
 		D18C0C4525CC64FD0041F4B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18C0C4425CC64FD0041F4B2 /* AppDelegate.swift */; };
 		D18C0C4725CC64FD0041F4B2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18C0C4625CC64FD0041F4B2 /* SceneDelegate.swift */; };
@@ -36,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D14D10FB25D6113200DA1F5E /* SanmaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SanmaViewController.swift; sourceTree = "<group>"; };
+		D14D110025D6158F00DA1F5E /* SanmaScoreDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SanmaScoreDB.swift; sourceTree = "<group>"; };
 		D170DCF525D0D9210064B9F9 /* ScoreDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreDB.swift; sourceTree = "<group>"; };
 		D18C0C4125CC64FD0041F4B2 /* MahjongScore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MahjongScore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D18C0C4425CC64FD0041F4B2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -105,6 +109,8 @@
 				D18C0C4625CC64FD0041F4B2 /* SceneDelegate.swift */,
 				D18C0C4825CC64FD0041F4B2 /* ViewController.swift */,
 				D170DCF525D0D9210064B9F9 /* ScoreDB.swift */,
+				D14D110025D6158F00DA1F5E /* SanmaScoreDB.swift */,
+				D14D10FB25D6113200DA1F5E /* SanmaViewController.swift */,
 				D18C0C4A25CC64FD0041F4B2 /* Main.storyboard */,
 				D18C0C4D25CC64FF0041F4B2 /* Assets.xcassets */,
 				D18C0C4F25CC64FF0041F4B2 /* LaunchScreen.storyboard */,
@@ -262,9 +268,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				D18C0C4925CC64FD0041F4B2 /* ViewController.swift in Sources */,
+				D14D10FC25D6113200DA1F5E /* SanmaViewController.swift in Sources */,
 				D18C0C4525CC64FD0041F4B2 /* AppDelegate.swift in Sources */,
 				D170DCF625D0D9210064B9F9 /* ScoreDB.swift in Sources */,
 				D18C0C4725CC64FD0041F4B2 /* SceneDelegate.swift in Sources */,
+				D14D110125D6158F00DA1F5E /* SanmaScoreDB.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

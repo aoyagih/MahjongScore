@@ -5,7 +5,6 @@
 //  Created by Aoyagi Hiroki on 2021/02/08.
 //
 
-import UIKit
 import Foundation
 
 class ScoreDB{
