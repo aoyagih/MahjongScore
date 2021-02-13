@@ -559,6 +559,82 @@
             </objects>
             <point key="canvasLocation" x="1386" y="891"/>
         </scene>
+        <!--点数表-->
+        <scene sceneID="IU0-ud-u5C">
+            <objects>
+                <viewController id="gwy-vT-LDT" customClass="ScoreTableViewController" customModule="MahjongScore" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="DOH-gw-PMI">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="UFC-C5-sbj">
+                                <rect key="frame" x="20" y="79" width="335" height="32"/>
+                                <segments>
+                                    <segment title="四麻"/>
+                                    <segment title="三麻"/>
+                                </segments>
+                                <color key="selectedSegmentTintColor" systemColor="systemBackgroundColor"/>
+                                <connections>
+                                    <action selector="controlPlayerNum:" destination="gwy-vT-LDT" eventType="valueChanged" id="HRf-m7-gKF"/>
+                                </connections>
+                            </segmentedControl>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="点数表" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pZf-D6-oRa">
+                                <rect key="frame" x="151" y="30" width="73" height="29"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Njy-cC-D6H">
+                                <rect key="frame" x="20" y="125" width="335" height="32"/>
+                                <segments>
+                                    <segment title="子の上がり"/>
+                                    <segment title="親の上がり"/>
+                                    <segment title="満貫以上の点数"/>
+                                </segments>
+                                <connections>
+                                    <action selector="controlTables:" destination="duZ-aN-9ku" eventType="valueChanged" id="VV7-GV-dok"/>
+                                    <action selector="controlTables:" destination="gwy-vT-LDT" eventType="valueChanged" id="XTR-E4-wWA"/>
+                                </connections>
+                            </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ngk-Ol-KuR">
+                                <rect key="frame" x="325" y="32" width="25" height="24"/>
+                                <connections>
+                                    <action selector="showInfo:" destination="gwy-vT-LDT" eventType="touchUpInside" id="XHq-wP-irS"/>
+                                </connections>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="scoreTable4-1" translatesAutoresizingMaskIntoConstraints="NO" id="z7c-s3-7WS">
+                                <rect key="frame" x="79" y="191" width="225" height="398"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="er8-FV-Ae6"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="pZf-D6-oRa" firstAttribute="top" secondItem="er8-FV-Ae6" secondAttribute="top" constant="30" id="8bF-7w-BkN"/>
+                            <constraint firstItem="UFC-C5-sbj" firstAttribute="top" secondItem="pZf-D6-oRa" secondAttribute="bottom" constant="20" id="Eww-bV-8dX"/>
+                            <constraint firstItem="pZf-D6-oRa" firstAttribute="centerX" secondItem="DOH-gw-PMI" secondAttribute="centerX" id="F2k-zG-B3X"/>
+                            <constraint firstItem="UFC-C5-sbj" firstAttribute="leading" secondItem="er8-FV-Ae6" secondAttribute="leading" constant="20" id="JM0-o6-ckQ"/>
+                            <constraint firstItem="er8-FV-Ae6" firstAttribute="trailing" secondItem="Njy-cC-D6H" secondAttribute="trailing" constant="20" id="Ko1-V1-deL"/>
+                            <constraint firstItem="Njy-cC-D6H" firstAttribute="leading" secondItem="er8-FV-Ae6" secondAttribute="leading" constant="20" id="SvL-19-mKv"/>
+                            <constraint firstItem="Njy-cC-D6H" firstAttribute="top" secondItem="UFC-C5-sbj" secondAttribute="bottom" constant="15" id="Sx7-Iv-A28"/>
+                            <constraint firstItem="Ngk-Ol-KuR" firstAttribute="top" secondItem="er8-FV-Ae6" secondAttribute="top" constant="32" id="TSM-Se-xgn"/>
+                            <constraint firstItem="er8-FV-Ae6" firstAttribute="trailing" secondItem="UFC-C5-sbj" secondAttribute="trailing" constant="20" id="Ubl-Ux-FaB"/>
+                            <constraint firstItem="er8-FV-Ae6" firstAttribute="trailing" secondItem="Ngk-Ol-KuR" secondAttribute="trailing" constant="25" id="kWQ-7T-adX"/>
+                            <constraint firstItem="UFC-C5-sbj" firstAttribute="centerX" secondItem="DOH-gw-PMI" secondAttribute="centerX" id="xLu-tI-YU4"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="点数表" image="table" catalog="system" id="447-yr-sTb"/>
+                    <connections>
+                        <outlet property="imageView" destination="z7c-s3-7WS" id="D8G-Rg-XAz"/>
+                        <outlet property="playerNumSegmentedControl" destination="UFC-C5-sbj" id="fSB-25-CQW"/>
+                        <outlet property="tableSegmentedControl" destination="Njy-cC-D6H" id="sKb-x5-9G2"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bJ0-2p-1xj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="duZ-aN-9ku" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="2440.8000000000002" y="908.9955022488756"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="53J-Sg-SzW">
             <objects>
@@ -571,6 +647,7 @@
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="UOG-oi-gld"/>
                         <segue destination="1Hk-uK-qg5" kind="relationship" relationship="viewControllers" id="N95-WG-DmC"/>
+                        <segue destination="gwy-vT-LDT" kind="relationship" relationship="viewControllers" id="aG4-LZ-esg"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dFD-xh-jAc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -581,6 +658,8 @@
     <resources>
         <image name="3.circle" catalog="system" width="128" height="121"/>
         <image name="4.square" catalog="system" width="128" height="114"/>
+        <image name="scoreTable4-1" width="450" height="805"/>
+        <image name="table" catalog="system" width="128" height="93"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
